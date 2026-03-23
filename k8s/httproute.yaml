@@ -1,0 +1,23 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: demo-route
+  namespace: default
+spec:
+  parentRefs:
+  - name: global-gateway
+    namespace: default
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # This refers to the imported multi-cluster service
+    # Traffic is split 50/50 across clusters by default (if close) 
+    # Or you can adjust the weight if you are doing a migration
+    - group: net.gke.io
+      kind: ServiceImport
+      name: demo-service
+      port: 80
+      weight: 100

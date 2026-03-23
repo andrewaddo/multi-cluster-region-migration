@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+  namespace: default
+  labels:
+    app: demo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - name: demo-app
+        image: gcr.io/YOUR_PROJECT_ID/demo-app:v1 # Replace with your actual image
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          value: "YOUR_DB_IP" # Replace with your Cloud SQL IP
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASS
+          value: "postgres" # Replace with your password (use Secrets in production)
+        - name: DB_NAME
+          value: "postgres"
+        - name: CLUSTER_NAME
+          value: "cluster-a" # Change to cluster-b for the second cluster
+        - name: REGION
+          value: "us-central1" # Change to us-east1 for the second cluster
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
