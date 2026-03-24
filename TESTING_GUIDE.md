@@ -98,7 +98,7 @@ python3 scripts/performance_test.py http://<TH_REGIONAL_LB_IP>/status --rps 5 --
 After completing all three phases, you will have three CSV files:
 1.  `stage1_baseline.csv`
 2.  `migration_transition.csv`
-3.  `stage3_post_migration.csv`
+3.  `stage4_post_migration.csv`
 
 **How to use this data:**
 *   **Zero-Downtime Proof:** Open `migration_transition.csv` and filter by the `status_code` column. If all entries are `200`, the migration was seamless.

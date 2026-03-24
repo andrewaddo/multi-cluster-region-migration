@@ -10,7 +10,7 @@ By leveraging **GKE Multi-Cluster Gateway (MCG)** for traffic routing and **Clou
 ## Architecture & Technology Stack
 *   **Compute:** Google Kubernetes Engine (GKE) Standard clusters (`n4-standard-4`) in both regions.
 *   **Database:** Cloud SQL for PostgreSQL 15.
-*   **Traffic Management:** GKE Multi-Cluster Gateway API (`gke-l7-gxlb-mc`) and Multi-Cluster Services (MCS).
+*   **Traffic Management:** GKE Multi-Cluster Gateway API (`gke-l7-global-external-managed-mc`) and Multi-Cluster Services (MCS).
 *   **Application:** A containerized Python FastAPI service that reads/writes to the database and reports the serving cluster/region.
 *   **Testing Tool:** A custom Python load generator (`scripts/performance_test.py`) that maintains a constant request rate (5 RPS) and logs latency and HTTP response codes.
 

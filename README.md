@@ -47,7 +47,7 @@ Perform the actual migration between regions using the Gateway.
 ./demo_stages/03_regional_switch.sh singapore thailand
 ```
 *   **Actions**: Initiates traffic shift (by deleting the Singapore `ServiceExport`) and Database Promotion.
-*   **Verification**: Monitor `migration_report.csv` for zero dropped requests during the shift.
+*   **Verification**: Monitor `migration_transition.csv` for zero dropped requests during the shift.
 
 ### Stage 4: Post-Migration (Settle in Thailand)
 Once the migration is complete, settle back to a standard Regional Load Balancer in Thailand and tear down the complex multi-cluster routing.

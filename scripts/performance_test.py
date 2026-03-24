@@ -99,7 +99,7 @@ def main():
     parser.add_argument("url", help="Target URL (e.g. http://<gateway-ip>/status)")
     parser.add_argument("--rps", type=float, default=5.0, help="Target Requests Per Second (approx)")
     parser.add_argument("--duration", type=int, default=60, help="Duration in seconds (0 for infinite)")
-    parser.add_argument("--output", default="migration_report.csv", help="Filename for the CSV report")
+    parser.add_argument("--output", default="migration_transition.csv", help="Filename for the CSV report")
     
     args = parser.parse_args()
     
