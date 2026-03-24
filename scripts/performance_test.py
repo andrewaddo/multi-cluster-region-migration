@@ -30,17 +30,22 @@ class MetricsCollector:
             if not self.results:
                 return None
             
-            latencies = [r['latency'] for r in self.results if r['latency'] is not None]
+            latencies = sorted([r['latency'] for r in self.results if r['latency'] is not None])
             successes = [r for r in self.results if r['status_code'] == 200]
             errors = [r for r in self.results if r['status_code'] != 200]
             
+            p95 = 0
+            if latencies:
+                idx = int(len(latencies) * 0.95)
+                p95 = latencies[min(idx, len(latencies)-1)]
+
             summary = {
                 'total_requests': len(self.results),
                 'success_count': len(successes),
                 'error_count': len(errors),
                 'error_rate': (len(errors) / len(self.results)) * 100 if self.results else 0,
                 'avg_latency': statistics.mean(latencies) if latencies else 0,
-                'p95_latency': statistics.quantiles(latencies, n=20)[18] if len(latencies) >= 20 else (max(latencies) if latencies else 0),
+                'p95_latency': p95,
                 'cluster_dist': {}
             }
             

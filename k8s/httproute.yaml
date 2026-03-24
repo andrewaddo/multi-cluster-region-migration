@@ -13,9 +13,6 @@ spec:
         type: PathPrefix
         value: /
     backendRefs:
-    # This refers to the imported multi-cluster service
-    # Traffic is split 50/50 across clusters by default (if close) 
-    # Or you can adjust the weight if you are doing a migration
     - group: net.gke.io
       kind: ServiceImport
       name: demo-service

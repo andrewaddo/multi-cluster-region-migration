@@ -16,16 +16,14 @@ fi
 
 echo "=== STAGE 3: Migrating Traffic from $SOURCE to $DEST ==="
 
-# 1. Update HTTPRoute (Simulated Weight Shift)
-# In a real demo, we should use kubectl patch or have pre-made route files.
-# For simplicity, we point the user to the file.
-echo "--> Update weights in k8s/httproute.yaml:"
+# 1. Update Traffic Routing (Shift to DEST)
+echo "--> Shifting traffic by managing ServiceExports..."
 if [[ "$DEST" == "thailand" ]]; then
-    echo "    - singapore: 0"
-    echo "    - thailand: 100"
+    echo "    - Draining Singapore (Deleting ServiceExport)..."
+    kubectl --context=gke_${PROJECT_ID}_asia-southeast1_cluster-sg delete -f k8s/service-export.yaml
 else
-    echo "    - singapore: 100"
-    echo "    - thailand: 0"
+    echo "    - Draining Thailand (Deleting ServiceExport)..."
+    kubectl --context=gke_${PROJECT_ID}_asia-southeast3_cluster-th delete -f k8s/service-export.yaml
 fi
 
 # 2. Database Failover

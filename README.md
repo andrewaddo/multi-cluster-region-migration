@@ -25,29 +25,37 @@ This repository contains a structured, three-stage demonstration of a zero-downt
 To make the demo repeatable and easy to follow, we have organized the execution into three main scripts in the `demo_stages/` directory.
 
 ### Stage 1: Initial Baseline (Singapore)
-Set up the primary environment in Singapore.
+Set up the primary environment in Singapore with a standard Regional Load Balancer.
 ```bash
 ./demo_stages/01_setup_singapore.sh
 ```
-*   **Actions**: Provisions Singapore DB and GKE Cluster.
-*   **Verification**: Deploy the app and run the performance test to see the baseline.
+*   **Actions**: Provisions Singapore DB, GKE Cluster, and a standard `LoadBalancer` service.
+*   **Verification**: Deploy the app and run the performance test to see the baseline on a single cluster.
 
-### Stage 2: Regional Expansion (Thailand)
-Add the Thailand region and global load balancing.
+### Stage 2: Regional Expansion (Thailand & Global Gateway)
+Add the Thailand region and introduce the Multi-Cluster Gateway (MCG).
 ```bash
 ./demo_stages/02_setup_thailand.sh
 ```
-*   **Actions**: Provisions Thailand GKE Cluster and configures Multi-Cluster Gateway.
-*   **Verification**: Traffic is now globally load-balanced but still targets Singapore for local users.
+*   **Actions**: Provisions Thailand GKE Cluster, exports services from both clusters (`ServiceExport`), and configures the Global Multi-Cluster Gateway.
+*   **Verification**: Traffic is now globally load-balanced via the MCG IP but still favors Singapore for local users.
 
 ### Stage 3: Controlled Migration (Switch-Over)
-Perform the actual migration between regions.
+Perform the actual migration between regions using the Gateway.
 ```bash
 # Migrate from Singapore to Thailand
 ./demo_stages/03_regional_switch.sh singapore thailand
 ```
-*   **Actions**: Initiates traffic shift (via `HTTPRoute` weights) and Database Promotion.
-*   **Verification**: Monitor `migration_report.csv` for zero dropped requests.
+*   **Actions**: Initiates traffic shift (by deleting the Singapore `ServiceExport`) and Database Promotion.
+*   **Verification**: Monitor `migration_report.csv` for zero dropped requests during the shift.
+
+### Stage 4: Post-Migration (Settle in Thailand)
+Once the migration is complete, settle back to a standard Regional Load Balancer in Thailand and tear down the complex multi-cluster routing.
+```bash
+./demo_stages/04_post_migration.sh
+```
+*   **Actions**: Deploys a new `LoadBalancer` service in Thailand. Provides instructions to clean up the MCG resources and optionally decommission the old Singapore cluster.
+*   **Verification**: Verify the application is fully functional on the new Thailand Regional LB IP.
 
 ### Repeatability & Fail-back
 To migrate back to Singapore (Stage 4):

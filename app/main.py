@@ -58,6 +58,10 @@ def shutdown():
     if db_pool:
         db_pool.closeall()
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Multi-Cluster Demo App"}
+
 @app.get("/status")
 def read_status():
     return {

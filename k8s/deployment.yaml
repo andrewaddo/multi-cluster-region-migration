@@ -17,25 +17,25 @@ spec:
     spec:
       containers:
       - name: demo-app
-        image: gcr.io/YOUR_PROJECT_ID/demo-app:v1 # Replace with your actual image
+        image: asia-southeast1-docker.pkg.dev/multi-cluster-migration/demo-repo/demo-app:v2
         ports:
         - containerPort: 8000
         env:
         - name: DB_HOST
-          value: "YOUR_DB_IP" # Replace with your Cloud SQL IP
+          value: "10.250.1.3" # Replace with your Cloud SQL IP
         - name: DB_USER
           value: "postgres"
         - name: DB_PASS
-          value: "postgres" # Replace with your password (use Secrets in production)
+          value: "YourSecurePassword123" # Matches the setup_db.sh default
         - name: DB_NAME
           value: "postgres"
         - name: CLUSTER_NAME
-          value: "cluster-a" # Change to cluster-b for the second cluster
+          value: "cluster-sg"
         - name: REGION
-          value: "us-central1" # Change to us-east1 for the second cluster
+          value: "asia-southeast1"
         readinessProbe:
           httpGet:
-            path: /status
+            path: /
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 5
